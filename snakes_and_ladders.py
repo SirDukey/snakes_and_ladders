@@ -1,6 +1,11 @@
 import random
 
 
+def random_maker(used_positions, total):
+    available_value = random.randint(1, total - 1)
+    return random_maker(used_positions, total) if available_value in used_positions else available_value
+
+
 class Player:
     def __init__(self, name: str):
         self.name = name.capitalize()
@@ -24,11 +29,21 @@ class SnakesAndLadders:
 
     SnakesAndLadders(['mike', 'josh'])
     """
-    def __init__(self, players: list, board_size: int = 50):
+    def __init__(self, players: list, board_size: int = 50, snakes: int = 4, ladders: int = 4):
         self.players = players or []
         self.board_size = board_size
-        self.snakes = [(3, 16), (25, 38), (9, 42), (19, 24)]
-        self.ladders = [(8, 20), (17, 31), (23, 35), (33, 47)]
+
+        # Generate the snakes
+        self.snakes = [
+            (random_maker([], board_size), random_maker([], board_size)) for _ in range(0, snakes)
+        ]
+
+        # Generate the ladders in available positions
+        used_positions = [item for sublist in self.snakes for item in sublist]
+        self.ladders = [
+            (random_maker(used_positions, board_size), random_maker(used_positions, board_size)) for _ in range(0, ladders)
+        ]
+
         self.finished_player = None
 
         print('Welcome to Snakes & Ladders')
@@ -46,14 +61,16 @@ class SnakesAndLadders:
 
     def check_for_snake(self, player: Player):
         for snake in self.snakes:
-            snake_tail, snake_head = snake
+            snake_tail = min(snake)
+            snake_head = max(snake)
             if player.position == snake_head:
                 print(f'Oh no! {player.name} has reached a snake!! moving down to position {snake_tail}')
                 player.position = snake_tail
 
     def check_for_ladder(self, player: Player):
         for ladder in self.ladders:
-            ladder_bottom, ladder_top = ladder
+            ladder_bottom = min(ladder)
+            ladder_top = max(ladder)
             if player.position == ladder_bottom:
                 print(f'Hooray! {player.name} has reached a ladder, moving up to position {ladder_top}')
                 player.position = ladder_top
