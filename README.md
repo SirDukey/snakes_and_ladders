@@ -1,2 +1,7 @@
-# snakes_and_ladders
-Basic game of Snakes And Ladders
+# Snakes And Ladders
+
+Usage: `SnakesAndLadders(['mike', 'josh'])`
+
+Press `q` to quit.  Each player has a turn to roll the dice, first to reach the end wins!
+
+
