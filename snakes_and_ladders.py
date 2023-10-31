@@ -11,6 +11,7 @@ class Player:
         self.name = name.capitalize()
         self.position = 0
         self.board_size = 0
+        self.roll_result = 0
 
     def __move(self, move_steps: int):
         self.new_position = self.position + move_steps
@@ -19,17 +20,23 @@ class Player:
         self.position = self.new_position
 
     def roll_dice(self):
-        roll_result = random.randint(1, 6)
-        print(f'{self.name} has rolled a {roll_result}, ', end='')
-        self.__move(roll_result)
+        self.roll_result = random.randint(1, 6)
+        print(f'{self.name} has rolled a {self.roll_result}, ', end='')
+        self.__move(self.roll_result)
 
 
 class SnakesAndLadders:
-    """A snakes and ladders board game
-
-    SnakesAndLadders(['mike', 'josh'])
-    """
     def __init__(self, players: list, board_size: int = 50, snakes: int = 4, ladders: int = 4):
+        """A snakes and ladders board game
+
+        SnakesAndLadders(['mike', 'josh'])
+
+        Args:
+            players (list): a list of strings
+            board_size (int): the size of the board
+            snakes (int): how many snakes to implement
+            ladders (int): how many ladders to implement
+        """
         self.players = players or []
         self.board_size = board_size
 
